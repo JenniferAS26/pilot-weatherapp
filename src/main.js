@@ -32,6 +32,7 @@ function createCard(data) {
   iconItem.classList.add('icon');
   const iconImg = document.createElement('img');
   iconImg.classList.add('weather-img');
+  console.log(data);
   iconImg.setAttribute(
     'src',
     `https://www.weatherbit.io/static/img/icons/${data.data[0].weather.icon}.png`
@@ -65,12 +66,19 @@ function createCard(data) {
 // Llamados a la API
 
 const getData = async () => {
+  let APIUrl = '';
   const inputSearch = document.getElementsByClassName('search-input');
-  console.log(inputSearch[0].value);
-  const { data, status } = await api.get(`current?postal_code=${inputSearch[0].value}&key=d2e4088b81004ebea1f618ddc76bdd25`);
+  const inputValue = inputSearch[0].value;
+  const APIKey = 'd2e4088b81004ebea1f618ddc76bdd25';
+  console.log(typeof(inputValue))
 
+  if (!isNaN(inputValue)){
+    APIUrl = `current?postal_code=${inputValue}&key=${APIKey}`
+
+} else {
+  APIUrl = `current?&country=US&city=${inputValue}&key=${APIKey}`
+}
+  const { data, status } = await api.get(APIUrl);
   createCard(data);
   console.log(data.data[0]);
-  console.log(`Este es el estado ${status}`);
-
 }
